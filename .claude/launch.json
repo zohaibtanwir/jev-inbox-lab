@@ -1,0 +1,30 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "uvicorn",
+      "runtimeArgs": ["backend.app:app", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "backend-fake-jev",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["JEV_URL=http://localhost:8099/v1/systemone", "TYPESAFE_API_KEY=fake", "CORPUS_PATH=fixtures/corpus.sample.jsonl", "JEV_DB_PATH=./jev_inbox_lab.fake.db", "uvicorn", "backend.app:app", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "fake-jev",
+      "runtimeExecutable": "uvicorn",
+      "runtimeArgs": ["tools.fake_jev:app", "--port", "8099"],
+      "port": 8099
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "frontend",
+      "port": 5173
+    }
+  ]
+}

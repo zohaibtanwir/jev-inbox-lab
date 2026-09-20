@@ -147,7 +147,7 @@ columns.
 
 ### Right — run panel
 
-- **Controls:** Emails selector (All / First 25), Workers selector
+- **Controls:** Emails selector (All / First 25 / Random 50), Workers selector
   (8 / 16 / 32 / 64), Start, Reset results
 - **Progress:** `n of 50`, percentage, remaining, failed
 - **Stats:** Run (wall clock), Average, Per second, p95
@@ -179,7 +179,7 @@ instrumentation for this view.
 |---|---|
 | `GET /api/emails` | corpus list |
 | `GET /api/questions` | current question set |
-| `POST /api/runs` | start a run, body `{worker_count, email_limit}`, returns `{run_id}` |
+| `POST /api/runs` | start a run, body `{worker_count, email_limit, sample, seed}` (`sample` = `first` or `random`; `seed` optional, makes a random pick reproducible), returns `{run_id, email_ids}` |
 | `GET /api/runs/{id}/stream` | SSE channel for a run |
 | `GET /api/runs` | run history |
 | `GET /api/runs/{id}` | full results for one run |
