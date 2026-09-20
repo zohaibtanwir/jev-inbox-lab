@@ -1,0 +1,7 @@
+corpus.jsonl
+*.db
+*.sqlite
+.env
+node_modules/
+__pycache__/
+.venv/
