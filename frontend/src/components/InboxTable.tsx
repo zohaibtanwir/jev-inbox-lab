@@ -48,10 +48,10 @@ function sortValue(row: Row, key: SortKey): string | number | null {
 }
 
 const IMPORTANCE_STYLE = [
-  "bg-neutral-800 text-neutral-400",
-  "bg-sky-950 text-sky-300",
-  "bg-amber-950 text-amber-300",
-  "bg-red-950 text-red-300",
+  "bg-neutral-200 text-neutral-600",
+  "bg-sky-100 text-sky-800",
+  "bg-amber-100 text-amber-700",
+  "bg-red-100 text-red-700",
 ];
 
 function Pill({ level, label }: { level: number; label: string }) {
@@ -64,20 +64,20 @@ function Pill({ level, label }: { level: number; label: string }) {
 }
 
 function Bar({ value, tone }: { value: number | null; tone: string }) {
-  if (value === null) return <span className="text-neutral-600">–</span>;
+  if (value === null) return <span className="text-neutral-400">–</span>;
   const pct = Math.round(value * 100);
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 w-16 overflow-hidden rounded bg-neutral-800">
+      <div className="h-1.5 w-16 overflow-hidden rounded bg-neutral-200">
         <div className={`h-full ${tone}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="w-8 text-right tabular-nums text-neutral-300">{pct}%</span>
+      <span className="w-8 text-right tabular-nums text-neutral-700">{pct}%</span>
     </div>
   );
 }
 
 function Spinner() {
-  return <span className="inline-block h-3 w-3 animate-spin rounded-full border border-neutral-600 border-t-neutral-200" />;
+  return <span className="inline-block h-3 w-3 animate-spin rounded-full border border-neutral-400 border-t-neutral-800" />;
 }
 
 function ProbList({ probs, pick }: { probs: Record<string, number>; pick?: string }) {
@@ -86,13 +86,13 @@ function ProbList({ probs, pick }: { probs: Record<string, number>; pick?: strin
     <ul className="space-y-0.5">
       {entries.map(([k, v]) => (
         <li key={k} className="flex items-center gap-2 text-xs">
-          <div className="h-1 w-24 overflow-hidden rounded bg-neutral-800">
-            <div className={`h-full ${k === pick ? "bg-emerald-500" : "bg-neutral-500"}`} style={{ width: `${Math.round(v * 100)}%` }} />
+          <div className="h-1 w-24 overflow-hidden rounded bg-neutral-200">
+            <div className={`h-full ${k === pick ? "bg-emerald-500" : "bg-neutral-400"}`} style={{ width: `${Math.round(v * 100)}%` }} />
           </div>
-          <span className={`w-10 text-right tabular-nums ${k === pick ? "text-emerald-300" : "text-neutral-400"}`}>
+          <span className={`w-10 text-right tabular-nums ${k === pick ? "text-emerald-700" : "text-neutral-600"}`}>
             {(v * 100).toFixed(1)}%
           </span>
-          <span className={k === pick ? "text-neutral-100" : "text-neutral-400"}>{k}</span>
+          <span className={k === pick ? "text-neutral-900" : "text-neutral-600"}>{k}</span>
         </li>
       ))}
     </ul>
@@ -106,7 +106,7 @@ function AnswerCard({ qid, answer, answers }: { qid: string; answer: Answer; ans
   if (answer.type === "choice") {
     body = (
       <>
-        <div className="mb-1 text-sm text-neutral-100">
+        <div className="mb-1 text-sm text-neutral-900">
           {answer.choice} <span className="text-xs text-neutral-500">conf {answer.confidence.toFixed(2)}</span>
         </div>
         <ProbList probs={answer.probabilities} pick={answer.choice} />
@@ -117,7 +117,7 @@ function AnswerCard({ qid, answer, answers }: { qid: string; answer: Answer; ans
     for (const [k, v] of Object.entries(answer.probabilities)) probs[`${k} · ${answer.legend[k] ?? ""}`] = v;
     body = (
       <>
-        <div className="mb-1 text-sm text-neutral-100">
+        <div className="mb-1 text-sm text-neutral-900">
           {answer.score.toFixed(2)} → {scoreLabel(answer)}{" "}
           <span className="text-xs text-neutral-500">conf {answer.confidence.toFixed(2)}</span>
         </div>
@@ -126,21 +126,21 @@ function AnswerCard({ qid, answer, answers }: { qid: string; answer: Answer; ans
     );
   } else {
     body = (
-      <div className="text-sm text-neutral-100">
+      <div className="text-sm text-neutral-900">
         {(answer.noul * 100).toFixed(1)}% <span className="text-xs text-neutral-500">noul · no confidence field</span>
-        <div className="mt-1 h-1 w-40 overflow-hidden rounded bg-neutral-800">
+        <div className="mt-1 h-1 w-40 overflow-hidden rounded bg-neutral-200">
           <div className="h-full bg-violet-500" style={{ width: `${Math.round(answer.noul * 100)}%` }} />
         </div>
       </div>
     );
   }
   return (
-    <div className={`rounded border p-2 ${spec && !open ? "border-neutral-900 opacity-50" : "border-neutral-800"}`}>
+    <div className={`rounded border p-2 ${spec && !open ? "border-neutral-100 opacity-50" : "border-neutral-200"}`}>
       <div className="mb-1 flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500">
         {qid}
-        <span className="rounded bg-neutral-900 px-1 normal-case tracking-normal">{answer.type}</span>
+        <span className="rounded bg-neutral-100 px-1 normal-case tracking-normal">{answer.type}</span>
         {spec && (
-          <span className="normal-case tracking-normal text-neutral-600">
+          <span className="normal-case tracking-normal text-neutral-400">
             speculative · gate {spec.gated_by} {open ? "open" : `closed (≤ ${spec.threshold})`}
           </span>
         )}
@@ -154,7 +154,7 @@ function Expanded({ row }: { row: Row }) {
   const r = row.result;
   if (!r) return <div className="p-3 text-sm text-neutral-500">Pending…</div>;
   if (r.error || !r.answers) {
-    return <div className="p-3 text-sm text-red-300">Error: {r.error ?? "no answers"}</div>;
+    return <div className="p-3 text-sm text-red-700">Error: {r.error ?? "no answers"}</div>;
   }
   const answers = r.answers;
   return (
@@ -163,7 +163,7 @@ function Expanded({ row }: { row: Row }) {
         <div className="text-xs text-neutral-500">
           {row.email.from} · {row.email.date}
         </div>
-        <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded bg-neutral-900/60 p-2 text-xs text-neutral-300">
+        <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded bg-neutral-100/60 p-2 text-xs text-neutral-700">
           {row.email.body}
         </pre>
         <div className="grid grid-cols-2 gap-2">
@@ -177,7 +177,7 @@ function Expanded({ row }: { row: Row }) {
       </div>
       <div>
         <div className="mb-1 text-xs uppercase tracking-wide text-neutral-500">raw answers</div>
-        <pre className="max-h-[32rem] overflow-auto rounded bg-neutral-900/60 p-2 text-[11px] leading-tight text-neutral-300">
+        <pre className="max-h-[32rem] overflow-auto rounded bg-neutral-100/60 p-2 text-[11px] leading-tight text-neutral-700">
           {JSON.stringify(answers, null, 2)}
         </pre>
       </div>
@@ -237,16 +237,16 @@ export default function InboxTable({ emails, emailIds, results }: Props) {
 
   return (
     <table className="w-full min-w-[68rem] table-fixed text-sm">
-      <thead className="sticky top-0 bg-neutral-950 text-left text-xs uppercase tracking-wide text-neutral-500">
+      <thead className="sticky top-0 bg-white text-left text-xs uppercase tracking-wide text-neutral-500">
         <tr>
           {COLS.map((c) => (
             <th
               key={c.key}
-              className={`cursor-pointer select-none px-3 py-2 font-medium hover:text-neutral-300 ${c.cls ?? ""}`}
+              className={`cursor-pointer select-none px-3 py-2 font-medium hover:text-neutral-700 ${c.cls ?? ""}`}
               onClick={() => onSort(c.key)}
             >
               {c.label}
-              {sortKey === c.key && <span className="ml-1 text-neutral-400">{asc ? "▲" : "▼"}</span>}
+              {sortKey === c.key && <span className="ml-1 text-neutral-600">{asc ? "▲" : "▼"}</span>}
             </th>
           ))}
         </tr>
@@ -261,20 +261,20 @@ export default function InboxTable({ emails, emailIds, results }: Props) {
           const conf = a ? minConfidence(a) : null;
           const open = openId === row.email.id;
           const cell = (content: ReactNode) =>
-            pending ? <Spinner /> : failed ? <span className="text-red-400">error</span> : content;
+            pending ? <Spinner /> : failed ? <span className="text-red-600">error</span> : content;
           return [
             <tr
               key={row.email.id}
-              className={`cursor-pointer border-t border-neutral-900 hover:bg-neutral-900/60 ${open ? "bg-neutral-900/40" : ""}`}
+              className={`cursor-pointer border-t border-neutral-100 hover:bg-neutral-100/60 ${open ? "bg-neutral-100/40" : ""}`}
               onClick={() => setOpenId(open ? null : row.email.id)}
             >
-              <td className="truncate px-3 py-1.5 text-neutral-300" title={row.email.from}>
+              <td className="truncate px-3 py-1.5 text-neutral-700" title={row.email.from}>
                 {displayName(row.email.from)}
               </td>
-              <td className="truncate px-3 py-1.5 text-neutral-100" title={row.email.subject}>
+              <td className="truncate px-3 py-1.5 text-neutral-900" title={row.email.subject}>
                 {row.email.subject}
               </td>
-              <td className="px-3 py-1.5 text-neutral-200">
+              <td className="px-3 py-1.5 text-neutral-800">
                 {cell(cat ? <span title={`conf ${cat.confidence.toFixed(2)}`}>{cat.choice}</span> : "–")}
               </td>
               <td className="px-3 py-1.5">
@@ -285,18 +285,18 @@ export default function InboxTable({ emails, emailIds, results }: Props) {
               <td className="px-3 py-1.5 tabular-nums">
                 {cell(
                   conf === null ? "–" : (
-                    <span className={conf < 0.6 ? "text-amber-300" : conf < 0.8 ? "text-neutral-200" : "text-neutral-400"}>
+                    <span className={conf < 0.6 ? "text-amber-700" : conf < 0.8 ? "text-neutral-800" : "text-neutral-600"}>
                       {conf.toFixed(2)}
                     </span>
                   ),
                 )}
               </td>
-              <td className="px-3 py-1.5 tabular-nums text-neutral-400">
+              <td className="px-3 py-1.5 tabular-nums text-neutral-600">
                 {cell(row.result?.latency_ms != null ? `${row.result.latency_ms}` : "–")}
               </td>
             </tr>,
             open ? (
-              <tr key={`${row.email.id}-x`} className="border-t border-neutral-900 bg-neutral-950">
+              <tr key={`${row.email.id}-x`} className="border-t border-neutral-100 bg-white">
                 <td colSpan={COLS.length}>
                   <Expanded row={row} />
                 </td>
@@ -306,7 +306,7 @@ export default function InboxTable({ emails, emailIds, results }: Props) {
         })}
         {sorted.length === 0 && (
           <tr>
-            <td colSpan={COLS.length} className="px-3 py-8 text-center text-neutral-600">
+            <td colSpan={COLS.length} className="px-3 py-8 text-center text-neutral-400">
               No emails loaded.
             </td>
           </tr>

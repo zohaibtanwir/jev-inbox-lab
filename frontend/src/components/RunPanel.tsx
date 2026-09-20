@@ -31,7 +31,7 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
   return (
     <div className="flex items-baseline justify-between gap-2">
       <span className="text-neutral-500">{label}</span>
-      <span className="tabular-nums text-neutral-100">
+      <span className="tabular-nums text-neutral-900">
         {value}
         {hint && <span className="ml-1 text-xs text-neutral-500">{hint}</span>}
       </span>
@@ -41,7 +41,7 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-1 border-t border-neutral-800 pt-3">
+    <div className="space-y-1 border-t border-neutral-200 pt-3">
       <h3 className="mb-1 text-xs uppercase tracking-wide text-neutral-500">{title}</h3>
       {children}
     </div>
@@ -52,7 +52,7 @@ function Segmented<T extends string | number>({
   options, value, onChange, disabled,
 }: { options: { value: T; label: string }[]; value: T; onChange: (v: T) => void; disabled?: boolean }) {
   return (
-    <div className="flex overflow-hidden rounded border border-neutral-800 text-xs">
+    <div className="flex overflow-hidden rounded border border-neutral-200 text-xs">
       {options.map((o) => (
         <button
           key={String(o.value)}
@@ -60,7 +60,7 @@ function Segmented<T extends string | number>({
           disabled={disabled}
           onClick={() => onChange(o.value)}
           className={`flex-1 px-2 py-1 transition-colors disabled:cursor-not-allowed ${
-            o.value === value ? "bg-neutral-200 text-neutral-900" : "bg-neutral-950 text-neutral-400 hover:bg-neutral-900"
+            o.value === value ? "bg-neutral-800 text-neutral-100" : "bg-white text-neutral-600 hover:bg-neutral-100"
           }`}
         >
           {o.label}
@@ -94,7 +94,7 @@ export default function RunPanel({ run, corpusSize, questionVersion, apiKeyPrese
             type="button"
             disabled={busy || apiKeyPresent === false}
             onClick={() => onStart(workers, choice.limit, choice.sample)}
-            className="flex-1 rounded bg-emerald-600 px-3 py-1.5 font-medium text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-neutral-800 disabled:text-neutral-500"
+            className="flex-1 rounded bg-emerald-600 px-3 py-1.5 font-medium text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-500"
           >
             {run.phase === "starting" ? "Starting…" : run.phase === "running" ? "Running…" : "Start"}
           </button>
@@ -102,33 +102,33 @@ export default function RunPanel({ run, corpusSize, questionVersion, apiKeyPrese
             type="button"
             disabled={busy || run.phase === "idle"}
             onClick={onReset}
-            className="rounded border border-neutral-700 px-3 py-1.5 text-neutral-300 hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded border border-neutral-300 px-3 py-1.5 text-neutral-700 hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Reset
           </button>
         </div>
-        <div className="text-xs text-neutral-600">
-          question set <span className="text-neutral-400">{questionVersion}</span>
+        <div className="text-xs text-neutral-400">
+          question set <span className="text-neutral-600">{questionVersion}</span>
           {run.runId !== null && (
             <>
-              {" "}· run <span className="text-neutral-400">#{run.runId}</span>
-              {run.modelVersion && <> · <span className="text-neutral-400">{run.modelVersion}</span></>}
+              {" "}· run <span className="text-neutral-600">#{run.runId}</span>
+              {run.modelVersion && <> · <span className="text-neutral-600">{run.modelVersion}</span></>}
               {run.phase === "viewing" && <span className="text-neutral-500"> (history)</span>}
             </>
           )}
         </div>
         {apiKeyPresent === false && (
-          <div className="rounded border border-amber-900 bg-amber-950/40 p-2 text-xs text-amber-300">
+          <div className="rounded border border-amber-300 bg-amber-50 p-2 text-xs text-amber-700">
             TYPESAFE_API_KEY is not set in .env — the backend will refuse to start a run.
           </div>
         )}
         {run.error && (
-          <div className="rounded border border-red-900 bg-red-950/40 p-2 text-xs text-red-300">{run.error}</div>
+          <div className="rounded border border-red-300 bg-red-50 p-2 text-xs text-red-700">{run.error}</div>
         )}
       </div>
 
       <Section title="Progress">
-        <div className="h-1.5 w-full overflow-hidden rounded bg-neutral-800">
+        <div className="h-1.5 w-full overflow-hidden rounded bg-neutral-200">
           <div className="h-full bg-emerald-500 transition-[width] duration-150" style={{ width: `${pct}%` }} />
         </div>
         <Stat label="Done" value={`${s.done} of ${s.total}`} hint={`${pct}%`} />
@@ -153,7 +153,7 @@ export default function RunPanel({ run, corpusSize, questionVersion, apiKeyPrese
         <Stat label="In" value={s.inputTokens.toLocaleString()} hint={usd(s.costUsd)} />
         <Stat label="Out" value={s.outputTokens.toLocaleString()} hint="$0.00" />
         <Stat label="Estimated cost" value={usd(s.costUsd)} />
-        <div className="pt-1 text-[11px] text-neutral-600">$0.042 per million input tokens. Output is free.</div>
+        <div className="pt-1 text-[11px] text-neutral-400">$0.042 per million input tokens. Output is free.</div>
       </Section>
     </div>
   );
