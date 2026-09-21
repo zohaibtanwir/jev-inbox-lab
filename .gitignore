@@ -16,3 +16,6 @@ corpus.raw.json
 
 # bv (beads viewer) local config and caches
 .bv/
+
+# start/stop script logs and pid files
+.run/
